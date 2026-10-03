@@ -41,3 +41,7 @@ Web používá adresy od kořene (`/css/style.css`, `/about/` ...), proto ho neo
 - `index.html` musí ležet přímo v kořeni repozitáře, ne uvnitř složky `momentum-website`.
 - Po nahrání počkej minutu až dvě a obnov stránku natvrdo (Cmd+Shift+R).
 - Menu a patička jsou přímo v každé stránce, nezávisí na JavaScriptu.
+
+## Ochrana osobních údajů
+
+`privacy/index.html` obsahuje žlutě označená místa `[DOPLNIT]` a `[POTVRDIT]`. Před spoléháním na stránku je vyplň nebo smaž (třída `todo` v textu). Web nenačítá nic z externích serverů, proto nemá cookie lištu.
