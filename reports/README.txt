@@ -1,1 +1,1 @@
-PDF reporty: reports/<slug>.pdf
+PDF reporty a infopacky: reports/<slug>.pdf
