@@ -34,4 +34,10 @@ Soubor `CNAME` je připravený. V GitHubu: Settings, Pages, zdroj větev `main`,
 
 ## Náhled u sebe
 
-Menu používá adresy se složkami, proto soubory neotvírej dvojklikem. V terminálu ve složce webu spusť `python3 -m http.server` a otevři `http://localhost:8000`.
+Web používá adresy od kořene (`/css/style.css`, `/about/` ...), proto ho neotvírej dvojklikem. V terminálu ve složce webu spusť `python3 -m http.server` a otevři `http://localhost:8000/`.
+
+## Když se po nahrání nic nezměnilo
+
+- `index.html` musí ležet přímo v kořeni repozitáře, ne uvnitř složky `momentum-website`.
+- Po nahrání počkej minutu až dvě a obnov stránku natvrdo (Cmd+Shift+R).
+- Menu a patička jsou přímo v každé stránce, nezávisí na JavaScriptu.
