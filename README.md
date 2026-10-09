@@ -45,3 +45,7 @@ Web používá adresy od kořene (`/css/style.css`, `/about/` ...), proto ho neo
 ## Ochrana osobních údajů
 
 `privacy/index.html` obsahuje žlutě označená místa `[DOPLNIT]` a `[POTVRDIT]`. Před spoléháním na stránku je vyplň nebo smaž (třída `todo` v textu). Web nenačítá nic z externích serverů, proto nemá cookie lištu.
+
+## Vzhled (design v3)
+
+Celý vzhled je v `css/style.css`, menu a patička jsou statické HTML v každé stránce. Hero animace na úvodní stránce je inline SVG řízené jen CSS a respektuje `prefers-reduced-motion`. Příležitosti a projekty se zobrazují jako karty (plakát nebo fotka, název, termín); detail příležitosti má informace vlevo a plakát vpravo. Obsah se dál přidává jen v `js/data.js`.
