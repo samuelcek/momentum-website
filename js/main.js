@@ -65,7 +65,7 @@ function detail(){
      +((i.photos||[]).length?`<div class="gal">${i.photos.map(p=>`<img src="${esc(U(p))}" alt="" loading="lazy">`).join('')}</div>`:'');
 }
 [lists,detail].forEach(safe);
-document.querySelectorAll('.sec-h,.band,.prose,.team,.contact,.pill').forEach(e=>e.classList.add('rv'));
+document.querySelectorAll('.sec-h,.band,.prose,.team,.contact,.pill,.soc-box').forEach(e=>e.classList.add('rv'));
 safe(reveal);
 }catch(e){console.error(e);root.classList.add('rv-off');}
 })();
