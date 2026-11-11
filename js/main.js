@@ -27,7 +27,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const both=fn=>['cs','en'].map(l=>`<div class="${l}">${fn(l)}</div>`).join('');
 const U=x=>/^(https?:|mailto:|\/)/.test(x)?x:'/'+x;
 const T=(a,b)=>`<span class="cs">${a}</span><span class="en">${b}</span>`;
-const tag=i=>typeof i.open==='boolean'?`<span class="tag ${i.open?'on':''}">${i.open?T('Otevřeno','Open'):T('Uzavřeno','Closed')}</span>`:'';
+const tag=i=>typeof i.open==='boolean'?`<span class="tag ${i.open?'on':''}">${i.open?T('Otevřeno','Open'):T('Přihlašování skončilo','Applications closed')}</span>`:'';
 const txt=v=>!v?'':Array.isArray(v)?`<ul>${v.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:String(v).split(/\n\n+/).map(x=>`<p>${esc(x)}</p>`).join('');
 const dt=(i,l)=>(i[l]&&i[l].dates)||i.dates||'';
 const pl=(i,l)=>[(i[l]&&i[l].country)||i.country,i.location].filter(Boolean).join(', ');
@@ -35,11 +35,11 @@ const hs=(i,l)=>{const h=i.hero;return typeof h==='string'?h:((h&&h[l])||'')};
 const pic=(i,l)=>{const s=hs(i,l);return s?`<img src="${esc(U(s))}" alt="${esc(i[l].title)}" loading="lazy">`:'<div class="noimg"><img src="/images/logo.png" alt=""></div>'};
 const MORE={cs:'Zobrazit detail',en:'View details'};
 const card=(base,i)=>{const u=`/${base}/${i.slug}/`;
-  return `<article class="card rv${base==='projects'?' proj':''}"><a class="card-img" href="${u}" tabindex="-1" aria-hidden="true">${both(l=>pic(i,l))}</a><div class="card-b">${both(l=>`${tag(i)}${i.report?'<span class="tag on">PDF report</span>':''}<h3><a href="${u}">${esc(i[l].title)}</a></h3><p class="when"><b>${esc(dt(i,l))}</b><br>${esc(pl(i,l))}</p><p>${esc(i[l].short||'')}</p><a class="more" href="${u}">${MORE[l]}</a>`)}</div></article>`};
+  return `<article class="card rv${base==='projects'?' proj':''}${i.open===false?' closed':''}"><a class="card-img" href="${u}" tabindex="-1" aria-hidden="true">${both(l=>pic(i,l))}</a><div class="card-b">${both(l=>`${tag(i)}${i.report?'<span class="tag on">PDF report</span>':''}<h3><a href="${u}">${esc(i[l].title)}</a></h3><p class="when"><b>${esc(dt(i,l))}</b><br>${esc(pl(i,l))}</p><p>${esc(i[l].short||'')}</p><a class="more" href="${u}">${MORE[l]}</a>`)}</div></article>`};
 function lists(){
   const list=$('list');if(!list)return;
   const k=list.dataset.source;
-  const items=k==='opportunities'?OP:k==='latest'?OP.filter(o=>o.open!==false).slice(0,3):PR.filter(p=>(p.status==='completed')===(k==='completed'));
+  const items=k==='opportunities'?OP:k==='latest'?OP.slice().sort((a,b)=>(b.open!==false)-(a.open!==false)).slice(0,3):PR.filter(p=>(p.status==='completed')===(k==='completed'));
   const base=(k==='opportunities'||k==='latest')?'opportunities':'projects';
   if(items.length)list.innerHTML=items.map(i=>card(base,i)).join('');
 }
@@ -48,8 +48,8 @@ function detail(){
   const isO=document.body.dataset.page==='opportunity';
   const S=location.pathname.split('/').filter(x=>x&&x!=='index.html').pop();
   const i=(isO?OP:PR).find(x=>x.slug===S);
-  const H={cs:{back:'Zpět',place:'Místo',dates:'Termín',deadline:'Uzávěrka přihlášek',details:'Podrobný popis',req:'Požadavky na účastníky',covered:'Co je hrazeno',apply:'Přihlásit se',info:'Infopack',report:'Stáhnout report (PDF)',nf:'Stránka nenalezena.'},
-           en:{back:'Back',place:'Place',dates:'Dates',deadline:'Application deadline',details:'Detailed description',req:'Participant requirements',covered:'What is covered',apply:'Apply',info:'Infopack',report:'Download report (PDF)',nf:'Page not found.'}};
+  const H={cs:{back:'Zpět',place:'Místo',dates:'Termín',deadline:'Uzávěrka přihlášek',details:'Podrobný popis',req:'Požadavky na účastníky',covered:'Co je hrazeno',apply:'Přihlásit se',info:'Infopack',report:'Stáhnout report (PDF)',closed:'Přihlašování skončilo',nf:'Stránka nenalezena.'},
+           en:{back:'Back',place:'Place',dates:'Dates',deadline:'Application deadline',details:'Detailed description',req:'Participant requirements',covered:'What is covered',apply:'Apply',info:'Infopack',report:'Download report (PDF)',closed:'Applications closed',nf:'Page not found.'}};
   if(!i){D.innerHTML=both(l=>`<p>${H[l].nf}</p><a class="back" href="/">${H[l].back}</a>`);return;}
   const back='/'+(isO?'opportunities':(i.status==='completed'?'completed-projects':'projects'))+'/';
   document.title=i.cs.title+' | Momentum Association';
@@ -57,11 +57,12 @@ function detail(){
   const sec=(h,v)=>v&&v.length?`<h2 class="sh">${h}</h2>${txt(v)}`:'';
   const btn=(u,t,c)=>u?`<a class="btn ${c}" href="${esc(U(u))}">${t}</a>`:'';
   const hasHero=!!(hs(i,'cs')||hs(i,'en'));
-  D.innerHTML=`<div class="od${hasHero?'':' nop'}">`+both(l=>{const t=i[l],h=H[l];
-    const ctas=`<div class="ctas">${isO?btn(i.applyUrl,t.applyLabel||h.apply,'')+btn(i.infopack,h.info,'blue'):btn(i.report,h.report,'blue')}</div>`;
+  D.innerHTML=`<div class="od${hasHero?'':' nop'}${isO&&i.open===false?' closed':''}">`+both(l=>{const t=i[l],h=H[l];
+    const shut=isO&&i.open===false;
+    const ctas=`<div class="ctas">${shut?`<span class="btn off" aria-disabled="true">${h.closed}</span>`:isO?btn(i.applyUrl,t.applyLabel||h.apply,'')+btn(i.infopack,h.info,'blue'):btn(i.report,h.report,'blue')}</div>`;
     return `<div class="od-head"><a class="back" href="${back}">${h.back}</a><div>${tag(i)}</div><h1 class="pt">${esc(t.title)}</h1><p class="lead">${esc(t.short||'')}</p>${meta(h,l)}${ctas}</div>`
      +(hasHero?`<figure class="od-poster"><img src="${esc(U(hs(i,l)||hs(i,l==='cs'?'en':'cs')))}" alt="${esc(t.title)}"></figure>`:'')
-     +`<div class="od-body">${sec(h.details,t.details)}${isO?sec(h.req,t.requirements)+sec(h.covered,t.covered)+(t.cta?`<p class="lead cta">${esc(t.cta)}</p>`:'')+ctas:''}</div>`})+'</div>'
+     +`<div class="od-body">${sec(h.details,t.details)}${isO?sec(h.req,t.requirements)+sec(h.covered,t.covered)+(t.cta&&!shut?`<p class="lead cta">${esc(t.cta)}</p>`:'')+ctas:''}</div>`})+'</div>'
      +((i.photos||[]).length?`<div class="gal">${i.photos.map(p=>`<img src="${esc(U(p))}" alt="" loading="lazy">`).join('')}</div>`:'');
 }
 [lists,detail].forEach(safe);

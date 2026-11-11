@@ -1,7 +1,7 @@
 /* Návod je v README.md. slug = název složky stránky (např. opportunities/white-rainbow/). */
 const DATA={
   opportunities:[
-    {slug:"when-i-was-your-age", open:true,
+    {slug:"when-i-was-your-age", open:false,
      hero:{cs:"images/opportunities/when-i-was-your-age/poster-cs.jpg", en:"images/opportunities/when-i-was-your-age/poster-en.jpg"},
      location:"Sărata Monteoru & Buzău",
      applyUrl:"https://forms.gle/sF9AjznCzPSEE2BZ6",

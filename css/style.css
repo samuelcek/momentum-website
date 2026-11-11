@@ -130,3 +130,8 @@ footer{background:var(--navy);color:#cfe0f6;margin-top:2rem}footer a{color:#fff;
 .ft-eu h4{margin:1.3rem 0 .6rem}.contact .sl{font-size:1.1rem;margin:1.6rem 0 0}.contact .soc-row{justify-content:flex-start;margin-top:.8rem}
 .legal h4{font-size:1.05rem;margin:1.3rem 0 .3rem;color:var(--navy)}.legal p,.legal li{max-width:44rem}
 @media(max-width:480px){.soc-btn{width:100%;justify-content:center}}
+
+/* closed opportunities (v5) */
+.card.closed{background:#f5f7fa;box-shadow:none}.card.closed .card-img img{filter:grayscale(1);opacity:.6}.card.closed h3 a,.card.closed .when,.card.closed p{color:var(--mute)}.card.closed:hover{transform:none;box-shadow:none}
+.od.closed .od-poster img{filter:grayscale(1);opacity:.65}
+.btn.off{background:#e3e8f0;color:var(--mute);cursor:not-allowed;box-shadow:none}.btn.off:hover{transform:none;box-shadow:none}
